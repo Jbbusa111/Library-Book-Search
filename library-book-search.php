@@ -9,7 +9,7 @@
 
 //Include file for search form and search result
 require_once( plugin_dir_path( __FILE__ ) . 'shortcodes/search-form.php');
-require_once( plugin_dir_path( __FILE__ ) . 'shortcodes/search-results.php');
+require_once( plugin_dir_path( __FILE__ ) . 'shortcodes/book-search-form-ajax-handler.php');
 
 // Register custom post type and taxonomies on plugin activation
 add_action( 'init', 'librarysearch_activate' );
@@ -69,11 +69,9 @@ function librarysearch_book_price_range_callback( $post ) {
     $price_range_min = get_post_meta( $post->ID, 'price_range_min', true );
     $price_range_max = get_post_meta( $post->ID, 'price_range_max', true );
 
-    echo '<label for="price_range_min">' . __( 'Minimum Price', 'library-book-search' ) . '</label>';
+    echo '<label for="price_range_min">' . __( 'Book Price', 'library-book-search' ) . '</label>';
     echo '<input type="number" id="price_range_min" name="price_range_min" value="' . esc_attr( $price_range_min ) . '" />';
-    echo '<br>';
-    echo '<label for="price_range_max">' . __( 'Maximum Price', 'library-book-search' ) . '</label>';
-    echo '<input type="number" id="price_range_max" name="price_range_max" value="' . esc_attr( $price_range_max ) . '" />';
+    
 }
 
 // Callback function to display the "price range" custom field
@@ -101,13 +99,11 @@ function librarysearch_save_custom_fields( $post_id ) {
 
     // Validate and sanitize the "price range" custom field
     if ( isset( $_POST['price_range_min'] ) && isset( $_POST['price_range_max'] ) ) {
-        $price_range_min = sanitize_text_field( $_POST['price_range_min'] );
-        $price_range_max = sanitize_text_field( $_POST['price_range_max'] );
-
+        $book_price = sanitize_text_field( $_POST['price_range_min'] );
+        
         if ( is_numeric( $price_range_min ) && is_numeric( $price_range_max ) ) {
-            update_post_meta( $post_id, 'price_range_min', $price_range_min );
-            update_post_meta( $post_id, 'price_range_max', $price_range_max );
-        }
+            update_post_meta( $post_id, 'price_range_min', $book_price);
+         }
     }
 
     // Validate and sanitize the "rating" custom field
@@ -119,3 +115,10 @@ function librarysearch_save_custom_fields( $post_id ) {
         }
     }
 }
+function library_book_search_enqueue_scripts() {
+    wp_enqueue_script( 'jquery-ui-slider' );
+    wp_enqueue_style( 'jquery-ui', 'https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css' );
+    wp_enqueue_script( 'library_book_search_script', plugin_dir_url( __FILE__ ) . 'js/library_book_search.js', array( 'jquery', 'jquery-ui-slider' ), '1.0', true );
+    wp_enqueue_style( 'library_book_search_style', plugin_dir_url( __FILE__ ) . 'css/library_book_search.css', array(), '1.0' );
+}
+add_action( 'wp_enqueue_scripts', 'library_book_search_enqueue_scripts' );
