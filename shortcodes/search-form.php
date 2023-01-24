@@ -35,7 +35,7 @@ function librarysearch_form_shortcode() {
             <div style="flex: 1; padding: 5px;">
             <label for="price-range">Price Range:</label>
     <input type="text" id="price-range" readonly>
-    <div id="price-slider"></div>
+    <div id="price-slider" style="padding: 5px;"></div>
     
 </div>
         </div>
@@ -113,6 +113,8 @@ function fetch_publishers_from_db() {
     ) );
     return $publishers;
 }
+
+//This function enqueues the necessary scripts and styles for the jQuery UI slider on the front-end of the website.
 function librarysearch_enqueue_scripts() {
     wp_enqueue_script( 'jquery' );
     wp_enqueue_script( 'jquery-ui-slider' );
