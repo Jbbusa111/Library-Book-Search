@@ -90,7 +90,7 @@ if ($query->have_posts()) {
     echo '<tbody>';
     while ($query->have_posts()) {
         $query->the_post();
-        $price = get_post_meta(get_the_ID(), 'price', true);
+        $price = get_post_meta(get_the_ID(), 'price_range_min', true);
         $rating = get_post_meta(get_the_ID(), 'rating', true);
         echo '<tr>';
         echo '<td>' . get_the_title() . '</td>';
