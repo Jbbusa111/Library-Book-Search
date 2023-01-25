@@ -92,8 +92,9 @@ if ($query->have_posts()) {
         $query->the_post();
         $price = get_post_meta(get_the_ID(), 'price_range_min', true);
         $rating = get_post_meta(get_the_ID(), 'rating', true);
+        $link = '<a href="' . get_the_permalink() . '">' . get_the_title() . '</a>';
         echo '<tr>';
-        echo '<td>' . get_the_title() . '</td>';
+        echo '<td>' . $link . '</td>';
         echo '<td>' . $price . '</td>';
         echo '<td>' . $rating . '</td>';
         echo '<td>' . get_the_term_list(get_the_ID(), 'author', '', ', ') . '</td>';
